@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viktoriin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Viktoriin</h1>
+
+<div id="quiz"></div>
+
+<button onclick="checkQuiz()">Kontrolli vastuseid</button>
+<button onclick="generateQuiz()">Uus viktoriin</button>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+{
+question:"Kus elab Miron?",
+answers:["Narvas","Tallinnas","Metsas","Jõhvis"],
+correct:2
+},
+{
+question:"Kui vana on Martin Onga?",
+answers:["63","18","17","14"],
+correct:1
+},
+{
+question:"Milline värv on taevas?",
+answers:["Punane","Roheline","Sinine","Must"],
+correct:2
+},
+{
+question:"Kui palju õpilasi on meie klassis?",
+answers:["25","10","12","17"],
+correct:1
+},
+{
+question:"Milline on kõige parem eriala?",
+answers:["Multimeedia","IT tarkvaraarendaja","Kokk","Svarshik"],
+correct:1
+},
+{
+question:"Mis on Eesti pealinn?",
+answers:["Narva","Tartu","Tallinn","Pärnu"],
+correct:2
+},
+{
+question:"Mitu päeva on nädalas?",
+answers:["5","6","7","8"],
+correct:2
+},
+{
+question:"Mis värvi on rohi?",
+answers:["Punane","Roheline","Sinine","Must"],
+correct:1
+},
+{
+question:"Mitu kuud on aastas?",
+answers:["10","11","12","13"],
+correct:2
+},
+{
+question:"Mis on 2 + 2?",
+answers:["3","4","5","6"],
+correct:1
+},
+{
+question:"Mis on Eesti raha enne eurot?",
+answers:["Kroon","Dollar","Rubla","Mark"],
+correct:0
+},
+{
+question:"Milline loom haugub?",
+answers:["Kass","Koer","Lehm","Hobune"],
+correct:1
+},
+{
+question:"Milline lind ei lenda?",
+answers:["Kotkas","Kana","Pingviin","Varblane"],
+correct:2
+},
+{
+question:"Mitu ratast on jalgrattal?",
+answers:["1","2","3","4"],
+correct:1
+},
+{
+question:"Mis aastaajal sajab kõige rohkem lund?",
+answers:["Suvi","Sügis","Talv","Kevad"],
+correct:2
+},
+{
+question:"Mis on maailma suurim ookean?",
+answers:["Atlandi","India","Vaikne","Põhja-Jäämeri"],
+correct:2
+},
+{
+question:"Milline planeet on Maa naaber?",
+answers:["Mars","Pluuto","Neptuun","Merkuur"],
+correct:0
+},
+{
+question:"Mis keelt räägitakse Eestis?",
+answers:["Eesti","Jaapani","Hispaania","Hiina"],
+correct:0
+},
+{
+question:"Mitu jalga on ämblikul?",
+answers:["6","8","10","12"],
+correct:1
+},
+{
+question:"Mis on vee keemiline valem?",
+answers:["CO2","O2","H2O","NaCl"],
+correct:2
+},
+{
+question:"Mis on 10 × 10?",
+answers:["10","50","100","1000"],
+correct:2
+},
+{
+question:"Milline loom annab piima?",
+answers:["Kass","Koer","Lehm","Lammas"],
+correct:2
+},
+{
+question:"Mis värvi on banaan tavaliselt?",
+answers:["Punane","Kollane","Sinine","Must"],
+correct:1
+},
+{
+question:"Mitu tundi on ööpäevas?",
+answers:["12","18","24","48"],
+correct:2
+},
+{
+question:"Mis on Eesti rahvuslill?",
+answers:["Roos","Rukkilill","Tulp","Nartsiss"],
+correct:1
+},
+{
+question:"Mis on suurim mandriosa?",
+answers:["Aafrika","Eurasia","Põhja-Ameerika","Austraalia"],
+correct:1
+},
+{
+question:"Mitu tähte on eesti tähestikus?",
+answers:["27","32","40","20"],
+correct:1
+},
+{
+question:"Milline loom on metsakuningas?",
+answers:["Jänes","Hunt","Lõvi","Rebane"],
+correct:2
+},
+{
+question:"Mis on arvuti aju?",
+answers:["Monitor","Klaviatuur","Protsessor","Hiir"],
+correct:2
+},
+{
+question:"Kes kirjutas Harry Potteri?",
+answers:["J.K. Rowling","Tolkien","Shakespeare","Twain"],
+correct:0
+},
+{
+question:"Mitu tundi Lesha magab?",
+answers:["0","8","12","6"],
+correct:0
+}
+];
+
+let currentQuestions = [];
+
+function generateQuiz() {
+
+    document.getElementById("result").textContent = "";
+
+    const shuffled = [...questions]
+        .sort(() => Math.random() - 0.5);
+
+    currentQuestions = shuffled.slice(0,5);
+
+    let html = "";
+
+    currentQuestions.forEach((q,index) => {
+
+        html += `
+        <div class="zoom">
+            <h2>${index+1}. ${q.question}</h2>
+        `;
+
+        q.answers.forEach((answer,aIndex) => {
+            html += `
+            <label>
+                <input type="radio"
+                       name="q${index}"
+                       value="${aIndex}">
+                ${answer}
+            </label><br>
+            `;
+        });
+
+        html += "</div>";
+    });
+
+    document.getElementById("quiz").innerHTML = html;
+}
+
+function checkQuiz() {
+
+    let score = 0;
+
+    currentQuestions.forEach((q,index) => {
+
+        const selected =
+            document.querySelector(
+                `input[name="q${index}"]:checked`
+            );
+
+        if (
+            selected &&
+            Number(selected.value) === q.correct
+        ) {
+            score++;
+        }
+    });
+
+    let result = `Teie tulemus: ${score}/5`;
+
+    if(score === 5){
+        result += " Täiuslik";
+    }else if(score >= 3){
+        result += " Tubli";
+    }else{
+        result += " Proovi uuesti";
+    }
+
+    document.getElementById("result").textContent = result;
+}
+
+generateQuiz();
+</script>
+
+</body>
+</html>
